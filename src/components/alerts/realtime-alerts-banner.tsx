@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AlertTriangle, ShieldAlert, Crosshair, X } from "lucide-react";
-import { useRealtimeAlerts } from "@/hooks/use-alerts-realtime";
+import { useState } from "react";
+import { AlertTriangle, Crosshair, X } from "lucide-react";
+import { useAlertsRealtime } from "@/hooks/use-alerts-realtime";
 import type { Alert } from "@/types/domain";
 
 export interface RealtimeAlertsBannerProps {
@@ -13,7 +13,7 @@ export interface RealtimeAlertsBannerProps {
 export function RealtimeAlertsBanner({ organizationId, onFocusTruck }: RealtimeAlertsBannerProps) {
   const [activeBanner, setActiveBanner] = useState<Alert | null>(null);
 
-  useRealtimeAlerts(organizationId, (newAlert) => {
+  useAlertsRealtime(organizationId, (newAlert) => {
     setActiveBanner(newAlert);
   });
 
