@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { average } from "@/lib/utils/metrics";
+import type { TruckStatus } from "@/types/domain";
 
 export interface DashboardKpis {
   totalTrucks: number;
@@ -88,7 +89,7 @@ export interface FleetSnapshotRow {
   id: string;
   unit_number: string;
   name: string;
-  status: import("@/types/domain").TruckStatus;
+  status: TruckStatus;
   last_latitude: number | null;
   last_longitude: number | null;
   last_heading: number | null;
