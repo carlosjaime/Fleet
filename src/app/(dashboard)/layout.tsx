@@ -1,4 +1,5 @@
 import { getSessionContext, getUserMemberships } from "@/lib/auth/session";
+import { getOpenAlertsCount } from "@/features/alerts/queries";
 import { OrgProvider } from "@/components/providers/org-provider";
 import { RealtimeProvider } from "@/components/providers/realtime-provider";
 import { GpsSimulatorProvider } from "@/components/providers/gps-simulator-provider";
@@ -7,7 +8,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getSessionContext();
-  const memberships = await getUserMemberships(ctx.user.id);
+  const [memberships, openAlertsCount] = await Promise.all([
+    getUserMemberships(ctx.user.id),
+    getOpenAlertsCount(ctx.organization.id),
+  ]);
 
   const organizations = memberships
     .map((m) => m.organization)
@@ -33,7 +37,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <RealtimeProvider>
         <GpsSimulatorProvider>
           <TooltipProvider delayDuration={200}>
-            <DashboardShell organizations={organizations} activeId={ctx.organization.id}>
+            <DashboardShell
+              organizations={organizations}
+              activeId={ctx.organization.id}
+              openAlertsCount={openAlertsCount}
+            >
               {children}
             </DashboardShell>
           </TooltipProvider>

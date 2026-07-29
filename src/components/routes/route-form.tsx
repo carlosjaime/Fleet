@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { FieldError } from "@/components/forms/field-error";
+import { FormSection, FormActionsBar } from "@/components/forms/form-section";
 import type { RouteWithRelations } from "@/features/routes/queries";
 
 const NONE = "__none__";
@@ -101,7 +102,7 @@ export function RouteForm({
         </p>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <FormSection title="Información general">
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="name">Nombre de la ruta *</Label>
           <Input id="name" {...register("name")} placeholder="CDMX → Pachuca" />
@@ -110,6 +111,7 @@ export function RouteForm({
         <div className="space-y-1.5">
           <Label htmlFor="reference">Referencia</Label>
           <Input id="reference" {...register("reference")} placeholder="OC-2026-001" />
+          <p className="text-xs text-muted">Folio u orden de compra interna. Opcional.</p>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="priority">Prioridad</Label>
@@ -125,10 +127,10 @@ export function RouteForm({
             </SelectContent>
           </Select>
         </div>
-      </div>
+      </FormSection>
 
       <fieldset className="grid gap-4 rounded-[var(--radius)] border border-border p-4 sm:grid-cols-2">
-        <legend className="px-1 text-xs font-medium uppercase text-muted">Origen</legend>
+        <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-foreground">Origen</legend>
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="origin_name">Nombre del origen *</Label>
           <Input id="origin_name" {...register("origin_name")} placeholder="Ciudad de México" />
@@ -147,7 +149,7 @@ export function RouteForm({
       </fieldset>
 
       <fieldset className="grid gap-4 rounded-[var(--radius)] border border-border p-4 sm:grid-cols-2">
-        <legend className="px-1 text-xs font-medium uppercase text-muted">Destino</legend>
+        <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-foreground">Destino</legend>
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="destination_name">Nombre del destino *</Label>
           <Input id="destination_name" {...register("destination_name")} placeholder="Pachuca de Soto" />
@@ -165,7 +167,7 @@ export function RouteForm({
         </div>
       </fieldset>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <FormSection title="Asignación" description="Sin unidad y conductor asignados no podrás iniciar la ruta.">
         <div className="space-y-1.5">
           <Label htmlFor="truck_id">Unidad asignada</Label>
           <Select value={truckId ?? NONE} onValueChange={(v) => setValue("truck_id", v === NONE ? null : v)}>
@@ -198,6 +200,9 @@ export function RouteForm({
             </SelectContent>
           </Select>
         </div>
+      </FormSection>
+
+      <FormSection title="Programación" description="Fechas y estimados de la ruta. Todos opcionales.">
         <div className="space-y-1.5">
           <Label htmlFor="scheduled_start_at">Inicio programado</Label>
           <Input id="scheduled_start_at" type="datetime-local" {...register("scheduled_start_at")} />
@@ -214,16 +219,18 @@ export function RouteForm({
           <Label htmlFor="estimated_duration_minutes">Duración estimada (min)</Label>
           <Input id="estimated_duration_minutes" type="number" {...register("estimated_duration_minutes", { valueAsNumber: true })} />
         </div>
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="notes">Notas</Label>
-        <Textarea id="notes" {...register("notes")} rows={3} />
-      </div>
+        <div className="space-y-1.5 sm:col-span-2">
+          <Label htmlFor="notes">Notas</Label>
+          <Textarea id="notes" {...register("notes")} rows={3} placeholder="Instrucciones especiales, restricciones de horario, contacto en destino…" />
+        </div>
+      </FormSection>
 
       <div className="space-y-3 rounded-[var(--radius)] border border-border p-4">
-        <div className="flex items-center justify-between">
-          <Label>Waypoints intermedios</Label>
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <Label>Waypoints intermedios</Label>
+            <p className="mt-0.5 text-xs text-muted">Paradas obligatorias entre el origen y el destino, en orden.</p>
+          </div>
           <Button
             type="button"
             variant="outline"
@@ -270,14 +277,14 @@ export function RouteForm({
         )}
       </div>
 
-      <div className="flex items-center gap-2">
+      <FormActionsBar>
         <Button type="submit" disabled={pending}>
           {pending ? "Guardando…" : route ? "Guardar cambios" : "Crear ruta"}
         </Button>
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={pending}>
           Cancelar
         </Button>
-      </div>
+      </FormActionsBar>
     </form>
   );
 }

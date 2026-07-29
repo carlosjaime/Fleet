@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { FieldError } from "@/components/forms/field-error";
+import { FormSection, FormActionsBar } from "@/components/forms/form-section";
 import type { Truck } from "@/types/domain";
 
 export function TruckForm({ truck }: { truck?: Truck }) {
@@ -78,7 +79,7 @@ export function TruckForm({ truck }: { truck?: Truck }) {
         </p>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <FormSection title="Identificación" description="Datos que identifican la unidad de forma única en tu flotilla.">
         <div className="space-y-1.5">
           <Label htmlFor="name">Nombre de la unidad *</Label>
           <Input id="name" {...register("name")} placeholder="Camión Norte 1" />
@@ -87,6 +88,7 @@ export function TruckForm({ truck }: { truck?: Truck }) {
         <div className="space-y-1.5">
           <Label htmlFor="unit_number">Número de unidad *</Label>
           <Input id="unit_number" {...register("unit_number")} placeholder="TRK-009" />
+          <p className="text-xs text-muted">Debe ser único dentro de tu organización.</p>
           <FieldError errors={errors.unit_number?.message ? [errors.unit_number.message] : undefined} />
         </div>
         <div className="space-y-1.5">
@@ -96,9 +98,12 @@ export function TruckForm({ truck }: { truck?: Truck }) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="vin">VIN</Label>
-          <Input id="vin" {...register("vin")} maxLength={17} />
+          <Input id="vin" {...register("vin")} maxLength={17} placeholder="Opcional" />
           <FieldError errors={errors.vin?.message ? [errors.vin.message] : undefined} />
         </div>
+      </FormSection>
+
+      <FormSection title="Especificaciones" description="Características del vehículo. Todos estos campos son opcionales.">
         <div className="space-y-1.5">
           <Label htmlFor="brand">Marca</Label>
           <Input id="brand" {...register("brand")} placeholder="Kenworth" />
@@ -121,9 +126,12 @@ export function TruckForm({ truck }: { truck?: Truck }) {
           <Input id="vehicle_type" {...register("vehicle_type")} placeholder="Tractocamión" />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="capacity_kg">Capacidad (kg)</Label>
+          <Label htmlFor="capacity_kg">Capacidad de carga (kg)</Label>
           <Input id="capacity_kg" type="number" {...register("capacity_kg", { valueAsNumber: true })} />
         </div>
+      </FormSection>
+
+      <FormSection title="Combustible y kilometraje" description="Se actualizan automáticamente al recibir telemetría GPS, pero puedes ajustarlos manualmente.">
         <div className="space-y-1.5">
           <Label htmlFor="fuel_type">Tipo de combustible</Label>
           <Input id="fuel_type" {...register("fuel_type")} placeholder="Diésel" />
@@ -134,13 +142,16 @@ export function TruckForm({ truck }: { truck?: Truck }) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="current_fuel_pct">Combustible actual (%)</Label>
-          <Input id="current_fuel_pct" type="number" {...register("current_fuel_pct", { valueAsNumber: true })} />
+          <Input id="current_fuel_pct" type="number" min={0} max={100} {...register("current_fuel_pct", { valueAsNumber: true })} />
           <FieldError errors={errors.current_fuel_pct?.message ? [errors.current_fuel_pct.message] : undefined} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="odometer_km">Odómetro (km)</Label>
           <Input id="odometer_km" type="number" {...register("odometer_km", { valueAsNumber: true })} />
         </div>
+      </FormSection>
+
+      <FormSection title="Estado operativo">
         <div className="space-y-1.5">
           <Label htmlFor="status">Estado</Label>
           <Select value={status} onValueChange={(v) => setValue("status", v as TruckInput["status"])}>
@@ -155,16 +166,16 @@ export function TruckForm({ truck }: { truck?: Truck }) {
             </SelectContent>
           </Select>
         </div>
-      </div>
+      </FormSection>
 
-      <div className="flex items-center gap-2">
+      <FormActionsBar>
         <Button type="submit" disabled={pending}>
           {pending ? "Guardando…" : truck ? "Guardar cambios" : "Crear unidad"}
         </Button>
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={pending}>
           Cancelar
         </Button>
-      </div>
+      </FormActionsBar>
     </form>
   );
 }

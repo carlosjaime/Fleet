@@ -13,7 +13,13 @@ const PRIMARY = [
 ];
 
 /** Navegación inferior para móvil. El botón "Más" abre el sidebar completo. */
-export function MobileNav({ onMore }: { onMore: () => void }) {
+export function MobileNav({
+  onMore,
+  openAlertsCount = 0,
+}: {
+  onMore: () => void;
+  openAlertsCount?: number;
+}) {
   const pathname = usePathname();
   return (
     <nav
@@ -23,16 +29,24 @@ export function MobileNav({ onMore }: { onMore: () => void }) {
       {PRIMARY.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         const Icon = item.icon;
+        const isAlerts = item.href === "/alertas";
         return (
           <Link
             key={item.href}
             href={item.href}
             className={cn(
-              "flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1 text-[11px]",
+              "relative flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1 text-[11px]",
               active ? "text-cyan" : "text-muted",
             )}
           >
-            <Icon className="size-5" />
+            <span className="relative">
+              <Icon className="size-5" />
+              {isAlerts && openAlertsCount > 0 ? (
+                <span className="absolute -right-1.5 -top-1.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-critical text-[9px] font-semibold text-white">
+                  {openAlertsCount > 9 ? "9+" : openAlertsCount}
+                </span>
+              ) : null}
+            </span>
             {item.label}
           </Link>
         );

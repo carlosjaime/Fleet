@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { FieldError } from "@/components/forms/field-error";
+import { FormSection, FormActionsBar } from "@/components/forms/form-section";
 import type { Driver } from "@/types/domain";
 
 export function DriverForm({ driver }: { driver?: Driver }) {
@@ -71,7 +72,7 @@ export function DriverForm({ driver }: { driver?: Driver }) {
         </p>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <FormSection title="Datos personales">
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="full_name">Nombre completo *</Label>
           <Input id="full_name" {...register("full_name")} placeholder="Juan Pérez López" />
@@ -79,25 +80,13 @@ export function DriverForm({ driver }: { driver?: Driver }) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="email">Correo electrónico</Label>
-          <Input id="email" type="email" {...register("email")} />
+          <Input id="email" type="email" {...register("email")} placeholder="Opcional" />
           <FieldError errors={errors.email?.message ? [errors.email.message] : undefined} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="phone">Teléfono</Label>
           <Input id="phone" {...register("phone")} placeholder="55 1234 5678" />
           <FieldError errors={errors.phone?.message ? [errors.phone.message] : undefined} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="license_number">Número de licencia</Label>
-          <Input id="license_number" {...register("license_number")} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="license_type">Tipo de licencia</Label>
-          <Input id="license_type" {...register("license_type")} placeholder="Federal tipo E" />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="license_expiration">Vencimiento de licencia</Label>
-          <Input id="license_expiration" type="date" {...register("license_expiration")} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="status">Estado</Label>
@@ -112,21 +101,39 @@ export function DriverForm({ driver }: { driver?: Driver }) {
               <SelectItem value="suspended">Suspendido</SelectItem>
             </SelectContent>
           </Select>
+          {status === "suspended" ? (
+            <p className="text-xs text-amber">Un conductor suspendido no puede asignarse a rutas ni unidades.</p>
+          ) : null}
         </div>
-        <div className="space-y-1.5 sm:col-span-2">
+        <div className="space-y-1.5">
           <Label htmlFor="emergency_contact">Contacto de emergencia</Label>
           <Input id="emergency_contact" {...register("emergency_contact")} placeholder="Nombre y teléfono" />
         </div>
-      </div>
+      </FormSection>
 
-      <div className="flex items-center gap-2">
+      <FormSection title="Licencia" description="Se mostrará una advertencia cuando esté próxima a vencer.">
+        <div className="space-y-1.5">
+          <Label htmlFor="license_number">Número de licencia</Label>
+          <Input id="license_number" {...register("license_number")} />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="license_type">Tipo de licencia</Label>
+          <Input id="license_type" {...register("license_type")} placeholder="Federal tipo E" />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="license_expiration">Vencimiento de licencia</Label>
+          <Input id="license_expiration" type="date" {...register("license_expiration")} />
+        </div>
+      </FormSection>
+
+      <FormActionsBar>
         <Button type="submit" disabled={pending}>
           {pending ? "Guardando…" : driver ? "Guardar cambios" : "Crear conductor"}
         </Button>
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={pending}>
           Cancelar
         </Button>
-      </div>
+      </FormActionsBar>
     </form>
   );
 }

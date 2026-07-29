@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Truck } from "lucide-react";
-import { NAV_ITEMS } from "@/config/navigation";
+import { NAV_GROUPS } from "@/config/navigation";
 import { cn } from "@/lib/utils/cn";
 import { useOrg } from "@/components/providers/org-provider";
 import { RoleBadge } from "@/components/ui/status-badges";
@@ -11,7 +11,13 @@ import { RealtimeConnectionBadge } from "./realtime-connection-badge";
 import { UserMenu } from "./user-menu";
 import { publicEnv } from "@/config/env";
 
-export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+export function Sidebar({
+  onNavigate,
+  openAlertsCount = 0,
+}: {
+  onNavigate?: () => void;
+  openAlertsCount?: number;
+}) {
   const pathname = usePathname();
   const { organization, role } = useOrg();
 
@@ -25,30 +31,46 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         <span className="font-semibold">{publicEnv.NEXT_PUBLIC_APP_NAME}</span>
       </div>
 
-      {/* Navegación */}
-      <nav className="flex-1 space-y-1 overflow-y-auto p-3" aria-label="Navegación principal">
-        {NAV_ITEMS.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onNavigate}
-              aria-current={active ? "page" : undefined}
-              className={cn(
-                "flex items-center gap-3 rounded-[var(--radius)] px-3 py-2 text-sm font-medium transition-colors",
-                active
-                  ? "bg-surface-elevated text-foreground"
-                  : "text-muted hover:bg-surface-elevated/60 hover:text-foreground",
-              )}
-            >
-              <Icon className="size-4 shrink-0" />
-              {item.label}
-              {active ? <span className="ml-auto size-1.5 rounded-full bg-cyan" /> : null}
-            </Link>
-          );
-        })}
+      {/* Navegación agrupada: Operación (uso constante) vs. Gestión
+          (consulta periódica) — ayuda a ubicar una sección de un vistazo
+          en vez de escanear una lista plana de 9 ítems. */}
+      <nav className="flex-1 space-y-4 overflow-y-auto p-3" aria-label="Navegación principal">
+        {NAV_GROUPS.map((group) => (
+          <div key={group.label} className="space-y-1">
+            <p className="px-3 text-[11px] font-semibold uppercase tracking-wide text-muted/70">
+              {group.label}
+            </p>
+            {group.items.map((item) => {
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              const Icon = item.icon;
+              const isAlerts = item.href === "/alertas";
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onNavigate}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "flex items-center gap-3 rounded-[var(--radius)] px-3 py-2 text-sm font-medium transition-colors",
+                    active
+                      ? "bg-surface-elevated text-foreground"
+                      : "text-muted hover:bg-surface-elevated/60 hover:text-foreground",
+                  )}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  {item.label}
+                  {isAlerts && openAlertsCount > 0 ? (
+                    <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-critical px-1.5 text-[11px] font-semibold text-white">
+                      {openAlertsCount > 99 ? "99+" : openAlertsCount}
+                    </span>
+                  ) : active ? (
+                    <span className="ml-auto size-1.5 rounded-full bg-cyan" />
+                  ) : null}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Pie: organización, rol, conexión, usuario */}

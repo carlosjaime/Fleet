@@ -10,10 +10,12 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 export function DashboardShell({
   organizations,
   activeId,
+  openAlertsCount = 0,
   children,
 }: {
   organizations: OrgOption[];
   activeId: string;
+  openAlertsCount?: number;
   children: React.ReactNode;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -23,7 +25,7 @@ export function DashboardShell({
       {/* Sidebar fija en desktop */}
       <aside className="hidden w-64 shrink-0 border-r border-border md:block">
         <div className="sticky top-0 h-dvh">
-          <Sidebar />
+          <Sidebar openAlertsCount={openAlertsCount} />
         </div>
       </aside>
 
@@ -31,7 +33,7 @@ export function DashboardShell({
       <Dialog open={mobileOpen} onOpenChange={setMobileOpen}>
         <DialogContent className="left-0 top-0 h-dvh max-w-[280px] translate-x-0 translate-y-0 rounded-none border-l-0 p-0">
           <DialogTitle className="sr-only">Menú de navegación</DialogTitle>
-          <Sidebar onNavigate={() => setMobileOpen(false)} />
+          <Sidebar openAlertsCount={openAlertsCount} onNavigate={() => setMobileOpen(false)} />
         </DialogContent>
       </Dialog>
 
@@ -40,12 +42,13 @@ export function DashboardShell({
         <Header
           organizations={organizations}
           activeId={activeId}
+          openAlertsCount={openAlertsCount}
           onOpenSidebar={() => setMobileOpen(true)}
         />
         <main className="flex-1 space-y-6 p-4 pb-24 sm:p-6 md:pb-6">{children}</main>
       </div>
 
-      <MobileNav onMore={() => setMobileOpen(true)} />
+      <MobileNav openAlertsCount={openAlertsCount} onMore={() => setMobileOpen(true)} />
     </div>
   );
 }

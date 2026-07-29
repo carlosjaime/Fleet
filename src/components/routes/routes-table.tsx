@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Route as RouteIcon, Plus } from "lucide-react";
+import { Route as RouteIcon, Plus, X } from "lucide-react";
 import { DataTable } from "@/components/ui/data-table";
 import { RouteStatusBadge } from "@/components/ui/status-badges";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,16 @@ const STATUS_OPTIONS: { value: RouteStatus | "all"; label: string }[] = [
   { value: "completed", label: "Completada" },
   { value: "cancelled", label: "Cancelada" },
 ];
+
+/** Coincide con los colores de RouteStatusBadge — acento visual "de un vistazo". */
+const STATUS_ACCENT: Record<RouteStatus, string> = {
+  draft: "#9299A6",
+  scheduled: "#3B82F6",
+  in_progress: "#00D9F5",
+  paused: "#FFB020",
+  completed: "#22C55E",
+  cancelled: "#EF4444",
+};
 
 export function RoutesTable({ routes }: { routes: RouteWithRelations[] }) {
   const router = useRouter();
@@ -87,6 +97,13 @@ export function RoutesTable({ routes }: { routes: RouteWithRelations[] }) {
     },
   ];
 
+  const hasActiveFilters = search.trim() !== "" || status !== "all";
+
+  function clearFilters() {
+    setSearch("");
+    setStatus("all");
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -103,6 +120,11 @@ export function RoutesTable({ routes }: { routes: RouteWithRelations[] }) {
               ))}
             </SelectContent>
           </Select>
+          {hasActiveFilters ? (
+            <Button variant="ghost" size="sm" onClick={clearFilters}>
+              <X className="size-3.5" /> Limpiar filtros
+            </Button>
+          ) : null}
         </FilterBar>
         <PermissionGuard permission="routes:write">
           <Button onClick={() => router.push("/rutas/nuevo")}>
@@ -111,11 +133,35 @@ export function RoutesTable({ routes }: { routes: RouteWithRelations[] }) {
         </PermissionGuard>
       </div>
 
+      {hasActiveFilters ? (
+        <p className="text-xs text-muted">
+          Mostrando {filtered.length} de {routes.length} ruta{routes.length === 1 ? "" : "s"}
+        </p>
+      ) : null}
+
       <DataTable
         columns={columns}
         data={filtered}
         getRowId={(r) => r.id}
         onRowClick={(r) => router.push(`/rutas/${r.id}`)}
+        rowAccentColor={(r) => STATUS_ACCENT[r.status]}
+        mobileCard={(r) => (
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <p className="truncate font-medium">{r.name}</p>
+                <RouteStatusBadge status={r.status} />
+              </div>
+              <p className="truncate text-xs text-muted">
+                {r.origin_name} → {r.destination_name}
+              </p>
+            </div>
+            <div className="shrink-0 text-right text-xs text-muted">
+              <p>{formatPercent(r.progress_pct)}</p>
+              <p>{r.truck?.unit_number ?? "Sin unidad"}</p>
+            </div>
+          </div>
+        )}
         emptyState={
           <EmptyState
             icon={RouteIcon}

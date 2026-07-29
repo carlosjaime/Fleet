@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Menu, Bell } from "lucide-react";
 import { Breadcrumb } from "./breadcrumb";
+import { MobilePageTitle } from "./mobile-page-title";
 import { CommandSearch } from "./command-search";
 import { OrganizationSwitcher, type OrgOption } from "./organization-switcher";
 import { RealtimeConnectionBadge } from "./realtime-connection-badge";
@@ -14,10 +15,12 @@ import { useOrg } from "@/components/providers/org-provider";
 export function Header({
   organizations,
   activeId,
+  openAlertsCount = 0,
   onOpenSidebar,
 }: {
   organizations: OrgOption[];
   activeId: string;
+  openAlertsCount?: number;
   onOpenSidebar: () => void;
 }) {
   const { organization } = useOrg();
@@ -35,6 +38,7 @@ export function Header({
       </Button>
 
       <Breadcrumb />
+      <MobilePageTitle />
 
       <div className="ml-auto flex items-center gap-2 sm:gap-3">
         <div className="hidden md:block">
@@ -45,9 +49,12 @@ export function Header({
         <div className="hidden sm:block">
           <RealtimeConnectionBadge />
         </div>
-        <Button variant="ghost" size="icon" aria-label="Ver alertas" className="relative" asChild>
+        <Button variant="ghost" size="icon" aria-label={`Ver alertas${openAlertsCount > 0 ? ` (${openAlertsCount} abiertas)` : ""}`} className="relative" asChild>
           <Link href="/alertas">
             <Bell className="size-4" />
+            {openAlertsCount > 0 ? (
+              <span className="absolute right-1 top-1 flex h-2 w-2 rounded-full bg-critical" aria-hidden />
+            ) : null}
           </Link>
         </Button>
         <OrgClock timezone={organization.timezone} />

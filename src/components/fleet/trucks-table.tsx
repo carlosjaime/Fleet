@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Truck as TruckIcon, Plus } from "lucide-react";
+import { Truck as TruckIcon, Plus, X } from "lucide-react";
 import { DataTable } from "@/components/ui/data-table";
 import { TruckStatusBadge, DriverStatusBadge } from "@/components/ui/status-badges";
 import { FilterBar } from "@/components/ui/filter-bar";
@@ -22,6 +22,14 @@ const STATUS_OPTIONS: { value: TruckStatus | "all"; label: string }[] = [
   { value: "maintenance", label: "Mantenimiento" },
   { value: "offline", label: "Sin señal" },
 ];
+
+/** Coincide con los colores de TruckStatusBadge — acento visual "de un vistazo". */
+const STATUS_ACCENT: Record<TruckStatus, string> = {
+  active: "#22C55E",
+  idle: "#9299A6",
+  maintenance: "#FFB020",
+  offline: "#EF4444",
+};
 
 export function TrucksTable({ trucks }: { trucks: TruckWithDriver[] }) {
   const router = useRouter();
@@ -94,6 +102,13 @@ export function TrucksTable({ trucks }: { trucks: TruckWithDriver[] }) {
     },
   ];
 
+  const hasActiveFilters = search.trim() !== "" || status !== "all";
+
+  function clearFilters() {
+    setSearch("");
+    setStatus("all");
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -110,6 +125,11 @@ export function TrucksTable({ trucks }: { trucks: TruckWithDriver[] }) {
               ))}
             </SelectContent>
           </Select>
+          {hasActiveFilters ? (
+            <Button variant="ghost" size="sm" onClick={clearFilters}>
+              <X className="size-3.5" /> Limpiar filtros
+            </Button>
+          ) : null}
         </FilterBar>
         <PermissionGuard permission="fleet:write">
           <Button onClick={() => router.push("/flota/nuevo")}>
@@ -118,11 +138,35 @@ export function TrucksTable({ trucks }: { trucks: TruckWithDriver[] }) {
         </PermissionGuard>
       </div>
 
+      {hasActiveFilters ? (
+        <p className="text-xs text-muted">
+          Mostrando {filtered.length} de {trucks.length} unidad{trucks.length === 1 ? "" : "es"}
+        </p>
+      ) : null}
+
       <DataTable
         columns={columns}
         data={filtered}
         getRowId={(t) => t.id}
         onRowClick={(t) => router.push(`/flota/${t.id}`)}
+        rowAccentColor={(t) => STATUS_ACCENT[t.status]}
+        mobileCard={(t) => (
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <p className="telemetry truncate font-medium">{t.unit_number}</p>
+                <TruckStatusBadge status={t.status} />
+              </div>
+              <p className="truncate text-xs text-muted">
+                {t.name} · {t.driver?.full_name ?? "Sin conductor"}
+              </p>
+            </div>
+            <div className="shrink-0 text-right text-xs text-muted">
+              {t.last_speed_kmh != null ? <p>{formatSpeed(t.last_speed_kmh)}</p> : null}
+              {t.current_fuel_pct != null ? <p>{formatPercent(t.current_fuel_pct)}</p> : null}
+            </div>
+          </div>
+        )}
         emptyState={
           <EmptyState
             icon={TruckIcon}
