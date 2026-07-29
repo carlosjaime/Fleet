@@ -2,7 +2,7 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
 
 /* ==========================================================================
-   FleetOps — Sistema visual con animaciones Animate.css integradas
+   FleetOps — Sistema visual con Animate.css y Micro-interacciones
    ========================================================================== */
 
 @theme {
@@ -31,14 +31,14 @@
   /* Radios */
   --radius: 0.5rem;
 
-  /* Animaciones 150–250ms */
+  /* Easing */
   --ease-operational: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :root {
   color-scheme: dark;
-  --animate-duration: 0.4s;
-  --animate-delay: 0.1s;
+  --animate-duration: 0.45s;
+  --animate-delay: 0.05s;
 }
 
 @layer base {
@@ -104,50 +104,142 @@
     letter-spacing: -0.01em;
   }
 
-  /* Animaciones integradas estilo Animate.css para tarjetas y botones */
+  /* Micro-interacción en tarjetas */
   .card-hover-effect {
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
   }
   .card-hover-effect:hover {
     transform: translateY(-3px);
     border-color: rgba(0, 217, 245, 0.4);
-    box-shadow: 0 12px 24px -6px rgba(0, 217, 245, 0.12);
+    box-shadow: 0 12px 24px -6px rgba(0, 217, 245, 0.15);
   }
 }
 
-/* Fallback de keyframes Animate.css garantizados */
+/* ==========================================================================
+   Animate.css Core Engine & Keyframe Rules
+   ========================================================================== */
+.animate__animated {
+  animation-duration: var(--animate-duration) !important;
+  animation-fill-mode: both !important;
+}
+
+.animate__animated.animate__infinite {
+  animation-iteration-count: infinite !important;
+}
+.animate__animated.animate__fast {
+  animation-duration: 0.3s !important;
+}
+.animate__animated.animate__faster {
+  animation-duration: 0.2s !important;
+}
+.animate__animated.animate__slow {
+  animation-duration: 0.8s !important;
+}
+
+/* fadeIn */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+.animate__fadeIn {
+  animation-name: fadeIn !important;
+}
 
+/* fadeInUp */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translate3d(0, 16px, 0);
+    transform: translate3d(0, 20px, 0);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
 }
+.animate__fadeInUp {
+  animation-name: fadeInUp !important;
+}
 
+/* fadeInDown */
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translate3d(0, -16px, 0);
+    transform: translate3d(0, -20px, 0);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
 }
+.animate__fadeInDown {
+  animation-name: fadeInDown !important;
+}
 
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(0, 217, 245, 0.4);
+/* fadeInLeft */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-20px, 0, 0);
   }
-  50% {
-    box-shadow: 0 0 0 8px rgba(0, 217, 245, 0);
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
+}
+.animate__fadeInLeft {
+  animation-name: fadeInLeft !important;
+}
+
+/* fadeInRight */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(20px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+.animate__fadeInRight {
+  animation-name: fadeInRight !important;
+}
+
+/* zoomIn */
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.94, 0.94, 0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+.animate__zoomIn {
+  animation-name: zoomIn !important;
+}
+
+/* pulse */
+@keyframes pulse {
+  from { transform: scale3d(1, 1, 1); }
+  50% { transform: scale3d(1.04, 1.04, 1.04); }
+  to { transform: scale3d(1, 1, 1); }
+}
+.animate__pulse {
+  animation-name: pulse !important;
+}
+
+/* Leaflet: tema oscuro y ajustes de attribution */
+.leaflet-container {
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+}
+.leaflet-control-attribution {
+  background: rgba(17, 19, 26, 0.8) !important;
+  color: var(--color-muted) !important;
+  font-size: 10px;
+}
+.leaflet-control-attribution a {
+  color: var(--color-cyan) !important;
 }

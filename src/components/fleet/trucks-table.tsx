@@ -110,7 +110,7 @@ export function TrucksTable({ trucks }: { trucks: TruckWithDriver[] }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 animate__animated animate__fadeInUp">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <FilterBar search={search} onSearchChange={setSearch} searchPlaceholder="Buscar por unidad, nombre o placa…">
           <Select value={status} onValueChange={(v) => setStatus(v as TruckStatus | "all")}>

@@ -45,7 +45,7 @@ export function DashboardShell({
           openAlertsCount={openAlertsCount}
           onOpenSidebar={() => setMobileOpen(true)}
         />
-        <main className="flex-1 space-y-6 p-4 pb-24 sm:p-6 md:pb-6">{children}</main>
+        <main className="flex-1 space-y-6 p-4 pb-24 sm:p-6 md:pb-6 animate__animated animate__fadeIn">{children}</main>
       </div>
 
       <MobileNav openAlertsCount={openAlertsCount} onMore={() => setMobileOpen(true)} />

@@ -105,7 +105,7 @@ export function RoutesTable({ routes }: { routes: RouteWithRelations[] }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 animate__animated animate__fadeInUp">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <FilterBar search={search} onSearchChange={setSearch} searchPlaceholder="Buscar por nombre, origen o destino…">
           <Select value={status} onValueChange={(v) => setStatus(v as RouteStatus | "all")}>
