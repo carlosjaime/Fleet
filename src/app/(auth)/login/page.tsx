@@ -12,7 +12,7 @@ export default async function LoginPage({
 }) {
   const { redirect } = await searchParams;
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate__animated animate__fadeInUp">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Iniciar sesión</h1>
         <p className="text-sm text-muted">Accede al centro de control de tu flotilla.</p>

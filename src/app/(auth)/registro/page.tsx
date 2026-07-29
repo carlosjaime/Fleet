@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Crear cuenta" };
 
 export default function RegistroPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate__animated animate__fadeInUp">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Crear cuenta</h1>
         <p className="text-sm text-muted">

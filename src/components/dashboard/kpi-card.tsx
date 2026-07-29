@@ -23,7 +23,7 @@ const ACCENT: Record<NonNullable<KpiCardProps["accent"]>, string> = {
 
 export function KpiCard({ label, value, icon: Icon, hint, trend, accent = "cyan", className }: KpiCardProps) {
   return (
-    <Card className={cn("p-4", className)}>
+    <Card className={cn("p-4 animate__animated animate__fadeInUp card-hover-effect", className)}>
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="truncate text-xs font-medium uppercase tracking-wide text-muted">{label}</p>

@@ -14,7 +14,7 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between",
+        "flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between animate__animated animate__fadeInDown",
         className,
       )}
     >
