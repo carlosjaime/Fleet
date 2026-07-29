@@ -191,3 +191,45 @@ export async function deleteTruck(truckId: string): Promise<ActionResult> {
   revalidatePath("/flota");
   return { ok: true };
 }
+
+export async function sendLiveLocation(data: {
+  truckId: string;
+  latitude: number;
+  longitude: number;
+  speedKmh?: number;
+  heading?: number;
+}): Promise<ActionResult> {
+  const ctx = await getSessionContext();
+  const supabase = await createClient();
+
+  const recordedAt = new Date().toISOString();
+
+  // 1. Insertar ubicación en historial
+  const { error: locError } = await supabase.from("truck_locations").insert({
+    organization_id: ctx.organization.id,
+    truck_id: data.truckId,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    speed_kmh: data.speedKmh ?? 0,
+    heading: data.heading ?? 0,
+    recorded_at: recordedAt,
+  });
+
+  if (locError) return { ok: false, message: "Error al guardar ubicación GPS." };
+
+  // 2. Actualizar última posición conocida del camión
+  await supabase
+    .from("trucks")
+    .update({
+      last_latitude: data.latitude,
+      last_longitude: data.longitude,
+      last_speed_kmh: data.speedKmh ?? 0,
+      last_heading: data.heading ?? 0,
+      last_location_at: recordedAt,
+      status: (data.speedKmh ?? 0) > 2 ? "active" : "idle",
+    })
+    .eq("id", data.truckId)
+    .eq("organization_id", ctx.organization.id);
+
+  return { ok: true };
+}

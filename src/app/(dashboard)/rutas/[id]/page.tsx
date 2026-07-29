@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/ui/states";
 import { PermissionGuard } from "@/components/ui/permission-guard";
 import { RouteStatusBadge } from "@/components/ui/status-badges";
 import { RouteLifecycleActions } from "@/components/routes/route-lifecycle-actions";
+import { RoutePdfReport } from "@/components/routes/route-pdf-report";
 import { formatCoordinate, formatDateTime, formatKm, formatPercent } from "@/lib/utils/format";
 
 export const metadata: Metadata = { title: "Detalle de ruta" };
@@ -44,6 +45,12 @@ export default async function RouteDetailPage({ params }: { params: Promise<{ id
         actions={
           <>
             <RouteStatusBadge status={route.status} />
+            <RoutePdfReport
+              organizationName={ctx.organization.name}
+              route={route}
+              waypoints={waypoints}
+              activityLogs={activity}
+            />
             <PermissionGuard permission="routes:write">
               <Button asChild variant="outline">
                 <Link href={`/rutas/${route.id}/editar`}>Editar</Link>

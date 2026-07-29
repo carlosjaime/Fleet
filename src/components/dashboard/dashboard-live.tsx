@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTrucksRealtime, trucksQueryKey } from "@/hooks/use-trucks-realtime";
 import { useAlertsRealtime, alertsQueryKey } from "@/hooks/use-alerts-realtime";
@@ -8,6 +9,8 @@ import { useOrg } from "@/components/providers/org-provider";
 import { FleetMapPanel } from "@/components/maps/fleet-map-panel";
 import { AlertsPanel, type DashboardAlert } from "@/components/dashboard/alerts-panel";
 import { FleetStatusList, type FleetSnapshotItem } from "@/components/dashboard/fleet-status-list";
+import { RealtimeAlertsBanner } from "@/components/alerts/realtime-alerts-banner";
+import { DeviceGpsTracker } from "@/components/telemetry/device-gps-tracker";
 import type { MapRoutePath, MapUnit } from "@/components/maps/fleet-map";
 import type { Truck, Alert } from "@/types/domain";
 
@@ -25,9 +28,8 @@ export function DashboardLive({
   routeTracks: MapRoutePath[];
 }) {
   const { organizationId } = useOrg();
+  const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
 
-  // Sembramos la caché de TanStack Query con los datos del servidor y
-  // dejamos que los hooks de Realtime la mantengan sincronizada.
   const { data: trucks } = useQuery<Truck[]>({
     queryKey: trucksQueryKey(organizationId),
     queryFn: () => Promise.resolve(initialTrucks as unknown as Truck[]),
@@ -60,6 +62,7 @@ export function DashboardLive({
       speedKmh: t.last_speed_kmh ?? 0,
       fuelPct: t.current_fuel_pct ?? 0,
       status: t.status,
+      driverName: driverByTruckId.get(t.id)?.full_name,
     }));
 
   const fleetRows: FleetSnapshotItem[] = (trucks ?? []).map((t) => ({
@@ -86,7 +89,22 @@ export function DashboardLive({
 
   return (
     <div className="space-y-6">
-      <FleetMapPanel liveUnits={mapUnits} routes={routeTracks} />
+      <RealtimeAlertsBanner
+        organizationId={organizationId}
+        onFocusTruck={(truckId) => setSelectedUnitId(truckId)}
+      />
+
+      <DeviceGpsTracker
+        trucks={initialTrucks.map((t) => ({ id: t.id, unit_number: t.unit_number, name: t.name }))}
+      />
+
+      <FleetMapPanel
+        liveUnits={mapUnits}
+        routes={routeTracks}
+        selectedUnitId={selectedUnitId}
+        onSelectUnit={(id) => setSelectedUnitId(id)}
+      />
+
       <div className="grid gap-4 lg:grid-cols-2">
         <AlertsPanel alerts={alertRows} />
         <FleetStatusList trucks={fleetRows} />
