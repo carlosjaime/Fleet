@@ -128,6 +128,9 @@ importers:
       '@types/leaflet':
         specifier: ^1.9.20
         version: 1.9.21
+      '@types/lodash':
+        specifier: ^4.17.24
+        version: 4.17.24
       '@types/node':
         specifier: ^22.18.0
         version: 22.20.1
@@ -1678,6 +1681,9 @@ packages:
 
   '@types/leaflet@1.9.21':
     resolution: {integrity: sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==}
+
+  '@types/lodash@4.17.24':
+    resolution: {integrity: sha512-gIW7lQLZbue7lRSWEFql49QJJWThrTFFeIMJdp3eH4tKoxm1OvEPg02rm4wCCSHS0cL3/Fizimb35b7k8atwsQ==}
 
   '@types/node@22.20.1':
     resolution: {integrity: sha512-EANqOCF9QFyra+4pfxUcX9STKJpCLjMbObVzljIJomAWSnuSIEAvyzEU53GaajbXJEgdh0iEcPL+DGvpUd4k1Q==}
@@ -5122,6 +5128,8 @@ snapshots:
   '@types/leaflet@1.9.21':
     dependencies:
       '@types/geojson': 7946.0.16
+
+  '@types/lodash@4.17.24': {}
 
   '@types/node@22.20.1':
     dependencies:
