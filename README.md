@@ -356,7 +356,17 @@ planes de suscripción. Detalle completo en
 ---
 
 <div align="center">
+
 <img src="./public/brand/isotipo.svg" alt="" width="28" />
 <br />
 <sub>FleetOps · Hecho para la operación logística de Latinoamérica</sub>
+
+<br /><br />
+
+<img src="https://i.ibb.co/hR4W8tnY/devhive-512.png" alt="DevHive Software" width="32" height="32" />
+<br />
+<sub>Desarrollado por <strong>DevHive Software</strong></sub>
+<br />
+<sub>© 2026 DevHive Software. Todos los derechos reservados.</sub>
+
 </div>
