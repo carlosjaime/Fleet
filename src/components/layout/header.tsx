@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Menu, Bell } from "lucide-react";
 import { Breadcrumb } from "./breadcrumb";
 import { CommandSearch } from "./command-search";
@@ -44,8 +45,10 @@ export function Header({
         <div className="hidden sm:block">
           <RealtimeConnectionBadge />
         </div>
-        <Button variant="ghost" size="icon" aria-label="Notificaciones" className="relative">
-          <Bell className="size-4" />
+        <Button variant="ghost" size="icon" aria-label="Ver alertas" className="relative" asChild>
+          <Link href="/alertas">
+            <Bell className="size-4" />
+          </Link>
         </Button>
         <OrgClock timezone={organization.timezone} />
       </div>
