@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Truck } from "lucide-react";
 import { NAV_GROUPS } from "@/config/navigation";
 import { cn } from "@/lib/utils/cn";
 import { useOrg } from "@/components/providers/org-provider";
 import { RoleBadge } from "@/components/ui/status-badges";
 import { RealtimeConnectionBadge } from "./realtime-connection-badge";
 import { UserMenu } from "./user-menu";
-import { publicEnv } from "@/config/env";
+import { BrandLogo } from "@/components/brand/logo";
 
 export function Sidebar({
   onNavigate,
@@ -24,11 +23,8 @@ export function Sidebar({
   return (
     <div className="flex h-full flex-col bg-surface">
       {/* Marca */}
-      <div className="flex h-14 items-center gap-2 border-b border-border px-4">
-        <span className="flex size-8 items-center justify-center rounded-md bg-amber text-background">
-          <Truck className="size-4" />
-        </span>
-        <span className="font-semibold">{publicEnv.NEXT_PUBLIC_APP_NAME}</span>
+      <div className="flex h-14 items-center border-b border-border px-4">
+        <BrandLogo size={28} textClassName="text-base" />
       </div>
 
       {/* Navegación agrupada: Operación (uso constante) vs. Gestión

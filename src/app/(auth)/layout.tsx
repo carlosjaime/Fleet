@@ -1,5 +1,4 @@
-import { Truck } from "lucide-react";
-import { publicEnv } from "@/config/env";
+import { BrandLogo } from "@/components/brand/logo";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,11 +6,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Panel de marca (oculto en móvil) */}
       <div className="relative hidden flex-col justify-between overflow-hidden border-r border-border bg-surface p-10 lg:flex">
         <div className="grid-lines pointer-events-none absolute inset-0 opacity-40" aria-hidden />
-        <div className="relative flex items-center gap-2">
-          <span className="flex size-9 items-center justify-center rounded-md bg-amber text-background">
-            <Truck className="size-5" />
-          </span>
-          <span className="text-lg font-semibold">{publicEnv.NEXT_PUBLIC_APP_NAME}</span>
+        <div className="relative">
+          <BrandLogo size={36} textClassName="text-lg" />
         </div>
         <div className="relative space-y-4">
           <h2 className="text-2xl font-semibold leading-tight">

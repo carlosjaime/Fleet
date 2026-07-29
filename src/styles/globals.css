@@ -26,6 +26,8 @@
   /* Tipografía */
   --font-sans: var(--font-chivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", monospace;
+  /* Fuente de marca (logotipo, hero, encabezados de marca) */
+  --font-brand: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
 
   /* Radios moderados */
   --radius: 0.5rem;

@@ -1,19 +1,14 @@
 import Link from "next/link";
 import { Truck, Radar, ShieldCheck, Route as RouteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { publicEnv } from "@/config/env";
+import { BrandLogo } from "@/components/brand/logo";
 
 export default function LandingPage() {
   return (
     <main className="relative min-h-dvh overflow-hidden">
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" aria-hidden />
       <header className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <div className="flex items-center gap-2">
-          <span className="flex size-9 items-center justify-center rounded-md bg-amber text-background">
-            <Truck className="size-5" />
-          </span>
-          <span className="text-lg font-semibold">{publicEnv.NEXT_PUBLIC_APP_NAME}</span>
-        </div>
+        <BrandLogo size={36} textClassName="text-lg" />
         <nav className="flex items-center gap-2">
           <Button asChild variant="ghost" size="sm"><Link href="/login">Iniciar sesión</Link></Button>
           <Button asChild variant="primary" size="sm"><Link href="/registro">Crear cuenta</Link></Button>
@@ -24,7 +19,7 @@ export default function LandingPage() {
         <p className="telemetry text-xs uppercase tracking-widest text-cyan">
           Plataforma de monitoreo de flotillas · LATAM
         </p>
-        <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
+        <h1 className="font-brand mt-4 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
           El centro de control operativo para tu flotilla de camiones
         </h1>
         <p className="mt-5 max-w-2xl text-base text-muted">
