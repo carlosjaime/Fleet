@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   FleetOps — Sistema visual (centro de operaciones logísticas)
+   Tailwind CSS v4 (configuración CSS-first).
+   ========================================================================== */
+
+@theme {
+  /* Superficies */
+  --color-background: #090a0f;
+  --color-surface: #11131a;
+  --color-surface-elevated: #171a23;
+  --color-border: #272b36;
+
+  /* Texto */
+  --color-foreground: #f4f6f8;
+  --color-muted: #9299a6;
+
+  /* Acentos operativos */
+  --color-amber: #ffb020;
+  --color-cyan: #00d9f5;
+  --color-success: #22c55e;
+  --color-critical: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Tipografía */
+  --font-sans: var(--font-chivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", monospace;
+
+  /* Radios moderados */
+  --radius: 0.5rem;
+
+  /* Animaciones 150–250ms */
+  --ease-operational: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Foco visible y accesible en todos los elementos interactivos */
+  :focus-visible {
+    outline: 2px solid var(--color-cyan);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-cyan) 30%, transparent);
+  }
+
+  /* Respeta prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Scrollbars sobrias */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333846;
+  }
+}
+
+@layer components {
+  /* Textura de líneas técnicas sutil para paneles de mapa */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(39, 43, 54, 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(39, 43, 54, 0.4) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .telemetry {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Leaflet: tema oscuro y ajustes de attribution */
+.leaflet-container {
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+}
+.leaflet-control-attribution {
+  background: rgba(17, 19, 26, 0.8) !important;
+  color: var(--color-muted) !important;
+  font-size: 10px;
+}
+.leaflet-control-attribution a {
+  color: var(--color-cyan) !important;
+}
