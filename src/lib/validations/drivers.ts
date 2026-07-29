@@ -14,7 +14,7 @@ export const driverSchema = z.object({
   license_number: z.string().max(40).optional().or(z.literal("")),
   license_type: z.string().max(20).optional().or(z.literal("")),
   license_expiration: z.string().optional().or(z.literal("")),
-  status: driverStatusSchema.default("available"),
+  status: driverStatusSchema,
   emergency_contact: z.string().max(120).optional().or(z.literal("")),
 });
 

@@ -21,7 +21,7 @@ export const routeSchema = z.object({
   destination_longitude: longitudeSchema,
   truck_id: z.string().uuid().nullable().optional(),
   driver_id: z.string().uuid().nullable().optional(),
-  priority: routePrioritySchema.default("normal"),
+  priority: routePrioritySchema,
   scheduled_start_at: z.string().optional().or(z.literal("")),
   scheduled_end_at: z.string().optional().or(z.literal("")),
   estimated_distance_km: z.number().min(0).max(20_000).optional(),

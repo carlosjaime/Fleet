@@ -11,9 +11,9 @@ export const maintenanceStatusSchema = z.enum([
 
 export const maintenanceSchema = z.object({
   truck_id: z.string().uuid("Selecciona una unidad"),
-  type: maintenanceTypeSchema.default("preventive"),
+  type: maintenanceTypeSchema,
   description: z.string().max(500).optional().or(z.literal("")),
-  status: maintenanceStatusSchema.default("scheduled"),
+  status: maintenanceStatusSchema,
   scheduled_at: z.string().optional().or(z.literal("")),
   completed_at: z.string().optional().or(z.literal("")),
   odometer_at_service: z.number().min(0).max(10_000_000).optional(),
