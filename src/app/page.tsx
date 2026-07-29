@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Truck, Radar, ShieldCheck, Route as RouteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "@/components/brand/logo";
+import { DevHiveCredit } from "@/components/brand/devhive-credit";
 
 export default function LandingPage() {
   return (
@@ -46,6 +47,18 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
+
+      <footer className="relative mx-auto flex max-w-6xl flex-col items-center gap-3 border-t border-border px-6 py-8 sm:flex-row sm:justify-between">
+        <p className="text-xs text-muted">
+          © {new Date().getFullYear()} FleetOps. Todos los derechos reservados.
+        </p>
+        <div className="flex items-center gap-4">
+          <Link href="/acerca-de" className="text-xs text-muted hover:text-foreground">
+            Acerca de
+          </Link>
+          <DevHiveCredit />
+        </div>
+      </footer>
     </main>
   );
 }

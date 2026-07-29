@@ -9,6 +9,7 @@ import { RoleBadge } from "@/components/ui/status-badges";
 import { RealtimeConnectionBadge } from "./realtime-connection-badge";
 import { UserMenu } from "./user-menu";
 import { BrandLogo } from "@/components/brand/logo";
+import { DevHiveCredit } from "@/components/brand/devhive-credit";
 
 export function Sidebar({
   onNavigate,
@@ -79,6 +80,12 @@ export function Sidebar({
           </div>
         </div>
         <UserMenu />
+        <div className="flex items-center justify-between px-1">
+          <DevHiveCredit size={16} />
+          <Link href="/acerca-de" className="text-xs text-muted hover:text-foreground">
+            Acerca de
+          </Link>
+        </div>
       </div>
     </div>
   );

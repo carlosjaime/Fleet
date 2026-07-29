@@ -14,6 +14,7 @@ const PUBLIC_PATHS = [
   "/restablecer-contrasena",
   "/confirmar-email",
   "/acceso-denegado",
+  "/acerca-de",
 ];
 
 function isPublicPath(pathname: string): boolean {

@@ -1,4 +1,5 @@
 import { BrandLogo } from "@/components/brand/logo";
+import { DevHiveCredit } from "@/components/brand/devhive-credit";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -29,7 +30,10 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             </li>
           </ul>
         </div>
-        <p className="relative text-xs text-muted">© {new Date().getFullYear()} FleetOps</p>
+        <div className="relative flex items-center justify-between gap-3">
+          <p className="text-xs text-muted">© {new Date().getFullYear()} FleetOps</p>
+          <DevHiveCredit />
+        </div>
       </div>
 
       {/* Panel de formulario */}
