@@ -26,13 +26,23 @@ const LEGEND: { status: TruckStatus; label: string; color: string }[] = [
 export function FleetMapPanel({
   liveUnits,
   routes = [],
+  selectedUnitId,
+  onSelectUnit,
 }: {
   liveUnits: MapUnit[];
   routes?: MapRoutePath[];
+  selectedUnitId?: string | null;
+  onSelectUnit?: (id: string | null) => void;
 }) {
   const sim = useGpsSimulator();
   const [statusFilter, setStatusFilter] = useState<TruckStatus | "all">("all");
-  const [selected, setSelected] = useState<string | null>(null);
+  const [internalSelected, setInternalSelected] = useState<string | null>(null);
+
+  const selected = selectedUnitId !== undefined ? selectedUnitId : internalSelected;
+  const handleSelectUnit = (id: string | null) => {
+    setInternalSelected(id);
+    onSelectUnit?.(id);
+  };
 
   // Une unidades reales con simuladas (por número de unidad).
   const units = useMemo<MapUnit[]>(() => {
@@ -62,7 +72,7 @@ export function FleetMapPanel({
 
   return (
     <div className="relative h-[420px] overflow-hidden rounded-[var(--radius)] border border-border md:h-[520px]">
-      <FleetMap units={units} routes={routes} selectedUnitId={selected} onSelectUnit={setSelected} />
+      <FleetMap units={units} routes={routes} selectedUnitId={selected} onSelectUnit={handleSelectUnit} />
 
       {/* Controles superiores */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[1000] flex items-start justify-between p-3">
