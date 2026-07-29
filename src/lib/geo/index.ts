@@ -25,8 +25,7 @@ export function isValidCoordinate(point: GeoPoint): boolean {
 
 /** Normaliza grados a rango [0, 360). Útil para rumbo (heading). */
 export function normalizeDegrees(deg: number): number {
-  const mod = deg % 360;
-  return mod < 0 ? mod + 360 : mod;
+  return ((deg % 360) + 360) % 360;
 }
 
 /**
